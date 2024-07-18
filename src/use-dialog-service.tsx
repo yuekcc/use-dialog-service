@@ -7,7 +7,7 @@ import {
   provide,
   render,
   shallowRef,
-  type ComponentOptions,
+  type ComponentOptions
 } from 'vue';
 
 const THE_DIALOG_SERVICE = Symbol('THE_DIALOG_SERVICE');
@@ -67,8 +67,11 @@ export function useShowDialog() {
       closeDialog();
       opts.onClose?.();
       setTimeout(() => {
-        mountPointRef.value?.remove();
-        mountPointRef.value = void 0;
+        if (mountPointRef.value) {
+          render(null, mountPointRef.value);
+          mountPointRef.value?.remove();
+          mountPointRef.value = void 0;
+        }
         dialogRef.value = void 0;
       });
     }
